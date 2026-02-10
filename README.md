@@ -25,5 +25,5 @@ Movies are stored in a SQLite database and enriched with data from the OMDb API.
 
 ```bash
 git clone <repo-url>
-cd movie_project
+cd movie-project-api-sql
 ```
