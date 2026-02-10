@@ -16,7 +16,8 @@ with engine.connect() as connection:
             title TEXT UNIQUE NOT NULL,
             year INTEGER NOT NULL,
             rating REAL NOT NULL,
-            poster TEXT
+            poster TEXT,
+            imdb_id TEXT
         )
     """))
     connection.commit()
@@ -26,29 +27,35 @@ def list_movies():
     """Retrieve all movies from the database."""
     with engine.connect() as connection:
         result = connection.execute(
-            text("SELECT title, year, rating, poster FROM movies")
+            text("SELECT title, year, rating, poster, imdb_id FROM movies")
         )
         rows = result.fetchall()
 
     return {
-        title: {"year": year, "rating": rating, "poster": poster}
-        for title, year, rating, poster in rows
+        title: {
+            "year": year,
+            "rating": rating,
+            "poster": poster,
+            "imdb_id": imdb_id
+        }
+        for title, year, rating, poster, imdb_id in rows
     }
 
 
-def add_movie(title, year, rating, poster):
+def add_movie(title, year, rating, poster, imdb_id):
     with engine.connect() as connection:
         try:
             connection.execute(
                 text("""
-                    INSERT INTO movies (title, year, rating, poster)
-                    VALUES (:title, :year, :rating, :poster)
+                    INSERT INTO movies (title, year, rating, poster, imdb_id)
+                    VALUES (:title, :year, :rating, :poster, :imdb_id)
                 """),
                 {
                     "title": title,
                     "year": int(year),
                     "rating": float(rating),
-                    "poster": poster
+                    "poster": poster,
+                    "imdb_id": imdb_id
                 }
             )
             connection.commit()

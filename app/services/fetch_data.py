@@ -21,7 +21,7 @@ def fetch_movie_from_api(title):
     url = "http://www.omdbapi.com/"
     params = {
         "apikey": API_KEY,
-        "t": title
+        "t": title,
     }
 
     res = requests.get(url, params=params)
