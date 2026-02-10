@@ -170,7 +170,8 @@ def add_movie():
         movie_data["Title"],
         int(movie_data["Year"]),
         rating,
-        movie_data["Poster"]
+        movie_data["Poster"],
+        movie_data["imdbID"]
     )
 
     print(f'Movie "{movie_data["Title"]}" (Year: {movie_data["Year"]},'
@@ -481,12 +482,19 @@ def generate_website():
 
     for title, info in movies.items():
         poster = info.get("poster", "")
+        imdb_id = info.get("imdb_id")
+        imdb_url = (
+            f"https://www.imdb.com/title/{imdb_id}/"
+            if imdb_id else "#"
+        )
         movie_items += (
             f'<li>\n'
             f'    <div class="movie">\n'
-            f'        <img class="movie-poster" src="{poster}">\n'
-            f'        <div class="movie-title">{title}</div>\n'
-            f'        <div class="movie-year">{info["year"]}</div>\n'
+            f'      <a href="{imdb_url}" target="_blank">\n'
+            f'          <img class="movie-poster" src="{poster}">\n'
+            f'      </a>\n'
+            f'      <div class="movie-title">{title}</div>\n'
+            f'      <div class="movie-year">{info["year"]}</div>\n'
             f'    </div>\n'
             f'</li>\n'
         )
