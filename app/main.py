@@ -2,8 +2,8 @@ import random    # for random selection of a movie, (menu: 6. Random movie)
 import statistics    # for median
 import sys    # for exit application
 from rapidfuzz import process, fuzz    # for search
-from app.storage import movie_storage_sql as storage
-from app.services.fetch_data import fetch_movie_from_api
+from storage import movie_storage_sql as storage
+from services.fetch_data import fetch_movie_from_api
 from pathlib import Path
 
 
