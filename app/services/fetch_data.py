@@ -8,6 +8,13 @@ load_dotenv()
 
 API_KEY = os.getenv('OMDB_API_KEY')
 
+if not API_KEY:
+    raise RuntimeError(
+        "OMDB_API_KEY is not set."
+        "Please configure the environment variable with your OMDb API key"
+        "(see README)."
+    )
+
 
 def fetch_movie_from_api(title):
     """
