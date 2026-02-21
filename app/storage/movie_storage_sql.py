@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 DB_URL = f"sqlite:///{BASE_DIR / 'data' / 'movies.db'}"
 
 # Create the engine
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL)
 
 # Create the movies table if it does not exist
 with engine.connect() as connection:
