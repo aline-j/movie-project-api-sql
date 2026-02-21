@@ -190,6 +190,7 @@ def delete_movie():
     """
     # Get the data from the JSON file
     movies = storage.list_movies()
+    normalized_titles = {title.lower(): title for title in movies}
 
     # Movie title input
     while True:
@@ -204,16 +205,19 @@ def delete_movie():
             print("Action cancelled.")
             print_empty_line()
             continue_next_choice()
-        elif movie_title_to_delete not in movies:
-            print(f'Cannot find the movie "{movie_title_to_delete}" '
-                  f'in the database. Please try again.')
         else:
-            movies.pop(movie_title_to_delete)
-            print(f'Movie {movie_title_to_delete} successfully deleted')
-            break
+            key = movie_title_to_delete.lower()
+            if key not in normalized_titles:
+                print(f'Cannot find the movie "{movie_title_to_delete}" '
+                      f'in the database. Please try again.')
+            else:
+                real_title = normalized_titles[key]
+                movies.pop(real_title)
+                print(f'Movie {real_title} successfully deleted')
+                break
 
     # Delete the movie and save the data to the JSON file
-    storage.delete_movie(movie_title_to_delete)
+    storage.delete_movie(real_title)
     continue_next_choice()
 
 
@@ -223,6 +227,7 @@ def update_movie_rating():
     """
     # Get the data from the JSON file
     movies = storage.list_movies()
+    normalized_titles = {title.lower(): title for title in movies}
 
     # Movie title input
     while True:
@@ -237,21 +242,24 @@ def update_movie_rating():
             print("Action cancelled.")
             print_empty_line()
             continue_next_choice()
-        elif movie_title_to_update not in movies:
-            print(f'Cannot find the movie "{movie_title_to_update}" '
-                  f'in the database. Please try again.')
         else:
-            break
+            key = movie_title_to_update.lower()
+            if key not in normalized_titles:
+                print(f'Cannot find the movie "{movie_title_to_update}" '
+                      f'in the database. Please try again.')
+            else:
+                real_title = normalized_titles[key]
+                break
 
     # New rating input
     while True:
         try:
             new_movie_rating = float(input('Enter new rating (0-10): '))
             if 0 <= new_movie_rating <= 10:
-                movies[movie_title_to_update]['rating'] = new_movie_rating
-                print(f'Updated Movie {movie_title_to_update}.')
+                movies[real_title]['rating'] = new_movie_rating
+                print(f'Updated Movie {real_title}.')
                 # Update rating of movie and save the data to the JSON file
-                storage.update_movie(movie_title_to_update,
+                storage.update_movie(real_title,
                                      new_movie_rating)
                 break
         except ValueError:
