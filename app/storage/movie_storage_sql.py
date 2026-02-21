@@ -76,8 +76,10 @@ def delete_movie(title):
                 {"title": title},
             )
             connection.commit()
-        except Exception as e:
-            print(f"Error {e}")
+            return True
+        except Exception:
+            connection.rollback()
+            return False
 
 
 def update_movie(title, rating):
@@ -93,5 +95,7 @@ def update_movie(title, rating):
                 {"title": title, "rating": float(rating)},
             )
             connection.commit()
-        except Exception as e:
-            print(f"Error: {e}")
+            return True
+        except Exception:
+            connection.rollback()
+            return False
