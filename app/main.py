@@ -335,10 +335,26 @@ def search_movie():
             print("Action cancelled.")
             print_empty_line()
             continue_next_choice()
+            return
+
         break
 
+    term = search_term.casefold()
+
+    substring_hits = [
+        title for title in movies
+        if term in title.casefold()
+    ]
+
+    if substring_hits:
+        for title in substring_hits:
+            info = movies[title]
+            print(f"{title} ({info['year']}): {info['rating']}")
+        continue_next_choice()
+        return
+
     matches = process.extract(search_term, movies.keys(),
-                              scorer=fuzz.WRatio, limit=5)
+                              scorer=fuzz.partial_ratio, limit=5)
 
     good_matches = [match for match in matches if match[1] >= 60]
 
