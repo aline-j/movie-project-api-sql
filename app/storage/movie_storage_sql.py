@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine, text
+from sqlalchemy.exc import IntegrityError
 from pathlib import Path
 
 # Define the database URL
@@ -59,8 +60,10 @@ def add_movie(title, year, rating, poster, imdb_id):
                 }
             )
             connection.commit()
-        except Exception as e:
-            print(f"DB error: {e}")
+            return True
+
+        except IntegrityError:
+            # If the title already exists in the database
             return False
 
 
@@ -73,7 +76,6 @@ def delete_movie(title):
                 {"title": title},
             )
             connection.commit()
-            print(f"Movie {title} deleted successfully.")
         except Exception as e:
             print(f"Error {e}")
 
@@ -91,6 +93,5 @@ def update_movie(title, rating):
                 {"title": title, "rating": float(rating)},
             )
             connection.commit()
-            print(f"Movie '{title}' updated successfully.")
         except Exception as e:
             print(f"Error: {e}")

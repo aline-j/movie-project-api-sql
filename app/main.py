@@ -124,6 +124,9 @@ def add_movie():
     # Get the data from the JSON file
     movies = storage.list_movies()
 
+    # Existing movie titles normalized
+    existing_titles = {title.lower(): title for title in movies}
+
     # Movie title input
     while True:
         movie_title = input('Enter new movie name '
@@ -137,7 +140,7 @@ def add_movie():
             print("Action cancelled.")
             print_empty_line()
             continue_next_choice()
-        elif movie_title in movies:
+        elif movie_title.lower() in existing_titles:
             print(f'Movie "{movie_title}" is already in the database.')
         else:
             break
